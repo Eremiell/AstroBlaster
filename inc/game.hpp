@@ -2,8 +2,9 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
+#include <memory>
 #include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/Graphics/CircleShape.hpp>
+#include "inc/state.hpp"
 
 namespace astroblaster {
 	class Game {
@@ -12,8 +13,7 @@ namespace astroblaster {
 			void run();
 		private:
 			sf::RenderWindow window;
-			sf::CircleShape s;
-			void integrate(unsigned int controls);
+			std::unique_ptr<State> state;
 	};
 }
 
