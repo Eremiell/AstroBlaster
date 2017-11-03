@@ -3,6 +3,7 @@
 #define MAIN_STATE_HPP
 
 #include "inc/state.hpp"
+#include <array>
 #include <SFML/Graphics/Sprite.hpp>
 
 namespace astroblaster {
@@ -15,6 +16,7 @@ namespace astroblaster {
 			virtual void render() override;
 		private:
 			sf::Sprite player;
+			std::array<sf::Sprite, 8> bg_sprites;
 	};
 }
 

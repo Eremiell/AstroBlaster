@@ -16,6 +16,18 @@ namespace astroblaster {
 		this->player.setOrigin(subtexture.second.width / 2, subtexture.second.height / 2);
 		this->player.setRotation(90);
 		this->player.setPosition(800.0f, 400.0f);
+		for (std::size_t i = 0; i < 8; ++i) {
+			if (!this->tm.add_texture(u8"bkgd_" + std::to_string(i) + u8".png", static_cast<unsigned int>(TextureModes::Repeat))) {
+				throw file_not_found(u8"bkgd_" + std::to_string(i) + u8".png");
+			}
+			auto texture = this->tm.get_texture(u8"bkgd_" + std::to_string(i) + u8".png");
+			if (!texture) {
+				throw texture_not_found(u8"bkgd_" + std::to_string(i) + u8".png");
+			}
+			this->bg_sprites[i].setTexture(*texture, true);
+			this->bg_sprites[i].setTextureRect(sf::Rect<int>(0, 0, 1600, 800));
+		}
+		//this->bg_sprites[0].setColor(sf::Color::Black);
 	}
 
 	MainState::~MainState() {}
@@ -44,10 +56,18 @@ namespace astroblaster {
 			movement.y *= speed;
 		}
 		this->player.move(movement);
+		for (std::size_t i = 0; i < 8; ++i) {
+			auto rect = this->bg_sprites[i].getTextureRect();
+			rect.left += 1.0f * (i + 1);
+			this->bg_sprites[i].setTextureRect(rect);
+		}
 		return;
 	}
 
 	void MainState::render() {
+		for (std::size_t i = 0; i < 8; ++i) {
+			this->window.draw(this->bg_sprites[i]);
+		}
 		this->window.draw(this->player);
 		return;
 	}
