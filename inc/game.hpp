@@ -5,6 +5,7 @@
 #include <memory>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "inc/state.hpp"
+#include "inc/texture_manager.hpp"
 
 namespace astroblaster {
 	class Game {
@@ -13,6 +14,7 @@ namespace astroblaster {
 			void run();
 		private:
 			sf::RenderWindow window;
+			TextureManager tm;
 			std::unique_ptr<State> state;
 	};
 }

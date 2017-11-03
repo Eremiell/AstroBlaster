@@ -6,7 +6,7 @@
 #include "inc/main_state.hpp"
 
 namespace astroblaster {
-	Game::Game() : window(sf::VideoMode(1600.0f, 800.0f), "AstroBlaster", sf::Style::Titlebar | sf::Style::Close), state(new MainState(this->window)) {
+	Game::Game() : window(sf::VideoMode(1600.0f, 800.0f), "AstroBlaster", sf::Style::Titlebar | sf::Style::Close), tm(), state(new MainState(this->window, this->tm)) {
 		this->window.setKeyRepeatEnabled(false);
 	}
 
@@ -28,7 +28,7 @@ namespace astroblaster {
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::RControl))) {
 				running = false;
 			}
-			controls &= 0;
+			controls &= 0u;
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
 				controls |= static_cast<unsigned int>(Controls::Up);
 			}

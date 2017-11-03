@@ -1,11 +1,21 @@
 #include "inc/main_state.hpp"
 #include <cmath>
+#include <inc/utility.hpp>
 
 namespace astroblaster {
-	MainState::MainState(sf::RenderWindow &window) : State(window), s(30.0f) {
-		this->s.setFillColor(sf::Color::Green);
-		this->s.setOrigin(15.0f, 15.0f);
-		this->s.setPosition(800.0f, 400.0f);
+	MainState::MainState(sf::RenderWindow &window, TextureManager &tm) : State(window, tm) {
+		if (!this->tm.add_texture(u8"sheet.xml", static_cast<unsigned int>(TextureModes::Sheet))) {
+			throw file_not_found(u8"sheet.xml");
+		}
+		auto subtexture = this->tm.get_subtexture(u8"playerShip1_red.png");
+		if (!subtexture.first) {
+			throw texture_not_found(u8"playerShip1_red.png");
+		}
+		this->player.setTexture(*subtexture.first, true);
+		this->player.setTextureRect(subtexture.second);
+		this->player.setOrigin(subtexture.second.width / 2, subtexture.second.height / 2);
+		this->player.setRotation(90);
+		this->player.setPosition(800.0f, 400.0f);
 	}
 
 	MainState::~MainState() {}
@@ -33,12 +43,12 @@ namespace astroblaster {
 			movement.x *= speed;
 			movement.y *= speed;
 		}
-		s.move(movement);
+		this->player.move(movement);
 		return;
 	}
 
 	void MainState::render() {
-		this->window.draw(this->s);
+		this->window.draw(this->player);
 		return;
 	}
 }
