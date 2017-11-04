@@ -1,0 +1,35 @@
+fon/kenvector_future.ttf
+fon/kenvector_future_thin.ttf
+sfx/sfx_laser1.ogg
+sfx/sfx_laser2.ogg
+sfx/sfx_lose.ogg
+sfx/sfx_shieldDown.ogg
+sfx/sfx_shieldUp.ogg
+sfx/sfx_twoTone.ogg
+sfx/sfx_zap.ogg
+img/sheet.png
+img/sheet.xml
+
+©Keeney.nl, CC0, https://opengameart.org/content/space-shooter-redux
+
+img/bkgd_0.png
+img/bkgd_1.png
+img/bkgd_2.png
+img/bkgd_3.png
+img/bkgd_4.png
+img/bkgd_5.png
+img/bkgd_6.png
+img/bkgd_7.png
+
+©LuminousDragonGames, CC0, https://opengameart.org/content/parallax-space-scene-seamlessly-scrolls-too
+
+img/ships.png
+img/shipsColorLayer1.png
+img/shipsColorLayer2.png
+img/ships-combined.png
+
+©Eikester, CC-BY 3.0, https://opengameart.org/content/space-ships-0
+
+img/spritesheet.png
+
+©Blarget2, CC-BY 3.0, https://opengameart.org/content/space-shooter-sprites
