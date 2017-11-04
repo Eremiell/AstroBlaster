@@ -5,6 +5,9 @@
 #include "inc/state.hpp"
 #include <array>
 #include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/Font.hpp>
+#include <SFML/Graphics/Text.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
 
 namespace astroblaster {
 	class MainState : public State {
@@ -17,6 +20,11 @@ namespace astroblaster {
 		private:
 			sf::Sprite player;
 			std::array<sf::Sprite, 8> bg_sprites;
+			sf::Font font;
+			sf::Sprite icon;
+			sf::RectangleShape life_bar;
+			sf::RectangleShape life_bar_outline;
+			sf::Text player_name;
 	};
 }
 
