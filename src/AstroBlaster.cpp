@@ -12,7 +12,7 @@ int main() {
 		std::cerr << s << '\n';
 		return 1;
 	}
-	catch (std::exception e) {
+	catch (std::exception &e) {
 		std::cerr << e.what() << '\n';
 		return 1;
 	}
