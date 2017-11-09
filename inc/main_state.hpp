@@ -8,6 +8,7 @@
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
+#include "inc/player.hpp"
 
 namespace astroblaster {
 	class MainState : public State {
@@ -18,7 +19,7 @@ namespace astroblaster {
 			virtual void integrate(unsigned int controls) override;
 			virtual void render() override;
 		private:
-			sf::Sprite player;
+			Player player;
 			std::array<sf::Sprite, 8> bg_sprites;
 			sf::Font font;
 			sf::Sprite icon;
