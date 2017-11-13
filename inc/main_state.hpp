@@ -32,6 +32,7 @@ namespace astroblaster {
 			std::list<Enemy> enemies;
 			std::list<Projectile> projectiles;
 			void collide();
+			void update_hud();
 	};
 }
 

@@ -63,17 +63,7 @@ namespace astroblaster {
 			rect.left += 1.0f * (i + 1);
 			this->bg_sprites[i].setTextureRect(rect);
 		}
-		auto player_energy = this->player.get_energy();
-		this->life_bar.setSize(sf::Vector2<float>(static_cast<float>(player_energy), 20.0f));
-		if (player_energy <= 30) {
-			this->life_bar.setFillColor(sf::Color::Red);
-		}
-		else if (player_energy <= 60) {
-			this->life_bar.setFillColor(sf::Color::Yellow);
-		}
-		else {
-			this->life_bar.setFillColor(sf::Color::Green);
-		}
+		this->update_hud();
 		return;
 	}
 
@@ -110,6 +100,21 @@ namespace astroblaster {
 					itr = std::prev(this->projectiles.erase(itr));
 				}
 			}
+		}
+		return;
+	}
+
+	void MainState::update_hud() {
+		auto player_energy = this->player.get_energy();
+		this->life_bar.setSize(sf::Vector2<float>(static_cast<float>(player_energy), 20.0f));
+		if (player_energy <= 30) {
+			this->life_bar.setFillColor(sf::Color::Red);
+		}
+		else if (player_energy <= 60) {
+			this->life_bar.setFillColor(sf::Color::Yellow);
+		}
+		else {
+			this->life_bar.setFillColor(sf::Color::Green);
 		}
 		return;
 	}
