@@ -3,7 +3,7 @@
 #include "inc/utility.hpp"
 
 namespace astroblaster {
-	Player::Player(sf::RenderWindow &window, TextureManager &tm) : window(window) {
+	Player::Player(sf::RenderWindow &window, TextureManager &tm) : window(window), energy(100) {
 		if (!tm.add_texture(u8"sheet.xml", static_cast<unsigned int>(TextureModes::Sheet))) {
 			throw file_not_found(u8"sheet.xml");
 		}
@@ -55,9 +55,13 @@ namespace astroblaster {
 
 	void Player::collide_with(unsigned int type) {
 		if (type & static_cast<unsigned int>(CollisionType::Enemy)) {
-			//
+			this->energy -= 20;
 		}
 		return;
+	}
+
+	std::size_t Player::get_energy() {
+		return this->energy;
 	}
 
 	sf::Vector2<float> Player::weapon_position() const {
