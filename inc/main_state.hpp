@@ -11,6 +11,7 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include "inc/player.hpp"
 #include "inc/enemy.hpp"
+#include "inc/projectile.hpp"
 
 namespace astroblaster {
 	class MainState : public State {
@@ -29,6 +30,7 @@ namespace astroblaster {
 			sf::RectangleShape life_bar_outline;
 			sf::Text player_name;
 			std::list<Enemy> enemies;
+			std::list<Projectile> projectiles;
 	};
 }
 

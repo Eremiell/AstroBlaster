@@ -59,4 +59,9 @@ namespace astroblaster {
 		}
 		return;
 	}
+
+	sf::Vector2<float> Player::weapon_position() const {
+		auto bounds = this->sprite.getGlobalBounds();
+		return sf::Vector2<float>{bounds.left + bounds.width + 5.0f, bounds.top + bounds.height / 2};
+	}
 }

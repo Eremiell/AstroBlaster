@@ -1,23 +1,23 @@
 #pragma once
-#ifndef PLAYER_HPP
-#define PLAYER_HPP
+#ifndef PROJECTILE_HPP
+#define PROJECTILE_HPP
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Sprite.hpp>
+#include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Rect.hpp>
 #include "inc/texture_manager.hpp"
 
 namespace astroblaster {
-	class Player {
+	class Projectile {
 		public:
-			Player(sf::RenderWindow &window, TextureManager &tm);
-			void integrate(unsigned int controls);
+			Projectile(sf::RenderWindow &window, TextureManager &tm, sf::Vector2<float> position, bool direction);
+			void integrate();
 			void render();
-			sf::Rect<float> get_collision_box() const;
-			void collide_with(unsigned int type);
-			sf::Vector2<float> weapon_position() const;
+			sf::Rect<float> get_collision_box();
 		private:
 			sf::RenderWindow &window;
+			bool direction;
 			sf::Sprite sprite;
 	};
 }

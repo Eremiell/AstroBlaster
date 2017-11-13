@@ -45,9 +45,17 @@ namespace astroblaster {
 	MainState::~MainState() {}
 
 	void MainState::integrate(unsigned int controls) {
+		static sf::Clock weapon_cooldown;
 		this->player.integrate(controls);
+		if (controls & static_cast<unsigned int>(Controls::Space) && weapon_cooldown.getElapsedTime().asSeconds() >= 0.1f) {
+			weapon_cooldown.restart();
+			this->projectiles.emplace_back(this->window, this->tm, this->player.weapon_position(), true);
+		}
 		for (auto &enemy : this->enemies) {
 			enemy.integrate();
+		}
+		for (auto &projectile : this->projectiles) {
+			projectile.integrate();
 		}
 		auto player_box = this->player.get_collision_box();
 		for (auto it = this->enemies.begin(); it != this->enemies.end(); ++it) {
@@ -56,6 +64,14 @@ namespace astroblaster {
 				this->player.collide_with(static_cast<unsigned int>(CollisionType::Enemy));
 				it = std::prev(this->enemies.erase(it));
 				break;
+			}
+			for (auto itr = this->projectiles.begin(); itr != this->projectiles.end(); ++itr) {
+				auto projectile_box = itr->get_collision_box();
+				if (enemy_box.intersects(projectile_box)) {
+					it = std::prev(this->enemies.erase(it));
+					itr = std::prev(this->projectiles.erase(itr));
+					break;
+				}
 			}
 		}
 		for (std::size_t i = 0; i < 8; ++i) {
@@ -73,6 +89,9 @@ namespace astroblaster {
 		this->player.render();
 		for (auto &enemy : this->enemies) {
 			enemy.render();
+		}
+		for (auto &projectile : this->projectiles) {
+			projectile.render();
 		}
 		this->window.draw(this->icon);
 		this->window.draw(this->life_bar_outline);

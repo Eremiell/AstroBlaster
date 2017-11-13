@@ -41,6 +41,9 @@ namespace astroblaster {
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
 				controls |= static_cast<unsigned int>(Controls::Right);
 			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+				controls |= static_cast<unsigned int>(Controls::Space);
+			}
 			while (accumulator >= dt) {
 				this->state->integrate(controls);
 				accumulator -= dt;
