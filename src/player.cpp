@@ -15,11 +15,10 @@ namespace astroblaster {
 		this->sprite.setTextureRect(subtexture.second);
 		this->sprite.setOrigin(subtexture.second.width / 2, subtexture.second.height / 2);
 		this->sprite.setRotation(90);
-		this->sprite.setPosition(800.0f, 400.0f);
+		this->sprite.setPosition(600.0f, 400.0f);
 	}
 
 	void Player::integrate(unsigned int controls) {
-		static const float speed = 10.0f;
 		sf::Vector2<float> movement(0.0f, 0.0f);
 		if ((controls & static_cast<unsigned int>(Controls::Up)) && !(controls & static_cast<unsigned int>(Controls::Down))) {
 			movement.y -= 1.0f;

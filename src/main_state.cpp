@@ -1,5 +1,5 @@
 #include "inc/main_state.hpp"
-#include <inc/utility.hpp>
+#include "inc/utility.hpp"
 
 namespace astroblaster {
 	MainState::MainState(sf::RenderWindow &window, TextureManager &tm) : State(window, tm), player(window, tm) {
@@ -31,19 +31,23 @@ namespace astroblaster {
 		this->life_bar_outline.setSize(sf::Vector2<float>(100.0f, 20.0f));
 		this->life_bar_outline.setPosition(95.0f, 40.0f);
 		this->life_bar_outline.setOutlineThickness(2.0f);
-		this->life_bar.setFillColor(sf::Color::Red);
-		this->life_bar.setSize(sf::Vector2<float>(20.0f, 20.0f));
+		this->life_bar.setFillColor(sf::Color::Green);
+		this->life_bar.setSize(sf::Vector2<float>(100.0f, 20.0f));
 		this->life_bar.setPosition(95.0f, 40.0f);
 		this->player_name.setFont(this->font);
 		this->player_name.setCharacterSize(28);
 		this->player_name.setString(u8"Player1");
 		this->player_name.setPosition(215.0f, 32.0f);
+		this->enemies.emplace_back(Enemy(this->window, this->tm));
 	}
 
 	MainState::~MainState() {}
 
 	void MainState::integrate(unsigned int controls) {
 		this->player.integrate(controls);
+		for (auto &enemy : this->enemies) {
+			enemy.integrate();
+		}
 		for (std::size_t i = 0; i < 8; ++i) {
 			auto rect = this->bg_sprites[i].getTextureRect();
 			rect.left += 1.0f * (i + 1);
@@ -57,6 +61,9 @@ namespace astroblaster {
 			this->window.draw(this->bg_sprites[i]);
 		}
 		this->player.render();
+		for (auto &enemy : this->enemies) {
+			enemy.render();
+		}
 		this->window.draw(this->icon);
 		this->window.draw(this->life_bar_outline);
 		this->window.draw(this->life_bar);

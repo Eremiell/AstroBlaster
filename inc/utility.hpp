@@ -6,6 +6,8 @@
 #include <string_view>
 
 namespace astroblaster {
+	const float speed = 7.0f;
+
 	enum class Controls : unsigned int {
 		Up = 1 << 0,
 		Down = 1 << 1,

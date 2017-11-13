@@ -19,6 +19,7 @@ namespace astroblaster {
 		unsigned int controls = 0u;
 		while (running) {
 			accumulator += timer.restart().asSeconds();
+			controls &= 0u;
 			sf::Event event;
 			while (window.pollEvent(event)) {
 				if (event.type == sf::Event::Closed) {
@@ -28,7 +29,6 @@ namespace astroblaster {
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::RControl))) {
 				running = false;
 			}
-			controls &= 0u;
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
 				controls |= static_cast<unsigned int>(Controls::Up);
 			}

@@ -4,11 +4,13 @@
 
 #include "inc/state.hpp"
 #include <array>
+#include <list>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include "inc/player.hpp"
+#include "inc/enemy.hpp"
 
 namespace astroblaster {
 	class MainState : public State {
@@ -26,6 +28,7 @@ namespace astroblaster {
 			sf::RectangleShape life_bar;
 			sf::RectangleShape life_bar_outline;
 			sf::Text player_name;
+			std::list<Enemy> enemies;
 	};
 }
 
