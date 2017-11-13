@@ -31,6 +31,7 @@ namespace astroblaster {
 			sf::Text player_name;
 			std::list<Enemy> enemies;
 			std::list<Projectile> projectiles;
+			void collide();
 	};
 }
 

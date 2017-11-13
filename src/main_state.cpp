@@ -57,21 +57,7 @@ namespace astroblaster {
 		for (auto &projectile : this->projectiles) {
 			projectile.integrate();
 		}
-		auto player_box = this->player.get_collision_box();
-		for (auto it = this->enemies.begin(); it != this->enemies.end(); ++it) {
-			auto enemy_box = it->get_collision_box();
-			if (player_box.intersects(enemy_box)) {
-				this->player.collide_with(static_cast<unsigned int>(CollisionType::Enemy));
-				it = std::prev(this->enemies.erase(it));
-			}
-			for (auto itr = this->projectiles.begin(); itr != this->projectiles.end(); ++itr) {
-				auto projectile_box = itr->get_collision_box();
-				if (enemy_box.intersects(projectile_box)) {
-					it = std::prev(this->enemies.erase(it));
-					itr = std::prev(this->projectiles.erase(itr));
-				}
-			}
-		}
+		this->collide();
 		for (std::size_t i = 0; i < 8; ++i) {
 			auto rect = this->bg_sprites[i].getTextureRect();
 			rect.left += 1.0f * (i + 1);
@@ -106,6 +92,25 @@ namespace astroblaster {
 		this->window.draw(this->life_bar_outline);
 		this->window.draw(this->life_bar);
 		this->window.draw(this->player_name);
+		return;
+	}
+
+	void MainState::collide() {
+		auto player_box = this->player.get_collision_box();
+		for (auto it = this->enemies.begin(); it != this->enemies.end(); ++it) {
+			auto enemy_box = it->get_collision_box();
+			if (player_box.intersects(enemy_box)) {
+				this->player.collide_with(static_cast<unsigned int>(CollisionType::Enemy));
+				it = std::prev(this->enemies.erase(it));
+			}
+			for (auto itr = this->projectiles.begin(); itr != this->projectiles.end(); ++itr) {
+				auto projectile_box = itr->get_collision_box();
+				if (enemy_box.intersects(projectile_box)) {
+					it = std::prev(this->enemies.erase(it));
+					itr = std::prev(this->projectiles.erase(itr));
+				}
+			}
+		}
 		return;
 	}
 }
