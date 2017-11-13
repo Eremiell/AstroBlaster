@@ -63,14 +63,12 @@ namespace astroblaster {
 			if (player_box.intersects(enemy_box)) {
 				this->player.collide_with(static_cast<unsigned int>(CollisionType::Enemy));
 				it = std::prev(this->enemies.erase(it));
-				break;
 			}
 			for (auto itr = this->projectiles.begin(); itr != this->projectiles.end(); ++itr) {
 				auto projectile_box = itr->get_collision_box();
 				if (enemy_box.intersects(projectile_box)) {
 					it = std::prev(this->enemies.erase(it));
 					itr = std::prev(this->projectiles.erase(itr));
-					break;
 				}
 			}
 		}
