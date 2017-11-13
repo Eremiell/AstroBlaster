@@ -1,4 +1,5 @@
 #include "inc/main_state.hpp"
+#include <iterator>
 #include "inc/utility.hpp"
 
 namespace astroblaster {
@@ -47,6 +48,15 @@ namespace astroblaster {
 		this->player.integrate(controls);
 		for (auto &enemy : this->enemies) {
 			enemy.integrate();
+		}
+		auto player_box = this->player.get_collision_box();
+		for (auto it = this->enemies.begin(); it != this->enemies.end(); ++it) {
+			auto enemy_box = it->get_collision_box();
+			if (player_box.intersects(enemy_box)) {
+				this->player.collide_with(static_cast<unsigned int>(CollisionType::Enemy));
+				it = std::prev(this->enemies.erase(it));
+				break;
+			}
 		}
 		for (std::size_t i = 0; i < 8; ++i) {
 			auto rect = this->bg_sprites[i].getTextureRect();

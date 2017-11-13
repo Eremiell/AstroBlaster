@@ -26,4 +26,8 @@ namespace astroblaster {
 		this->window.draw(this->sprite);
 		return;
 	}
+
+	sf::Rect<float> Enemy::get_collision_box() const {
+		return this->sprite.getGlobalBounds();
+	}
 }

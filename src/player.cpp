@@ -48,4 +48,15 @@ namespace astroblaster {
 		this->window.draw(this->sprite);
 		return;
 	}
+
+	sf::Rect<float> Player::get_collision_box() const {
+		return this->sprite.getGlobalBounds();
+	}
+
+	void Player::collide_with(unsigned int type) {
+		if (type & static_cast<unsigned int>(CollisionType::Enemy)) {
+			//
+		}
+		return;
+	}
 }

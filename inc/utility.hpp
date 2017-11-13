@@ -20,6 +20,10 @@ namespace astroblaster {
 		Repeat = 1 << 1
 	};
 
+	enum class CollisionType : unsigned int {
+		Enemy = 1 << 0
+	};
+
 	std::string texture_not_found(std::string_view texture);
 
 	std::string file_not_found(std::string_view file);
