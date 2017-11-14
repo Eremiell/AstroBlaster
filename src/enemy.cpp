@@ -4,7 +4,7 @@
 #include "inc/utility.hpp"
 
 namespace astroblaster {
-	Enemy::Enemy(sf::RenderWindow &window, TextureManager &tm, MainState &state, AI_TYPE type) : window(window), state(state), type(type) {
+	Enemy::Enemy(sf::RenderWindow &window, TextureManager &tm, MainState &state, AI_TYPE type) : window(window), state(state), type(type), energy(10) {
 		if (!tm.add_texture(u8"sheet.xml", static_cast<unsigned int>(TextureModes::Sheet))) {
 			throw file_not_found(u8"sheet.xml");
 		}
@@ -36,6 +36,17 @@ namespace astroblaster {
 		return this->sprite.getGlobalBounds();
 	}
 
+	void Enemy::collide_with(unsigned int type) {
+		if (type & static_cast<unsigned int>(CollisionType::Projectile)) {
+			this->deduce_energy(10);
+		}
+		return;
+	}
+
+	std::size_t Enemy::get_energy() const {
+		return this->energy;
+	}
+
 	sf::Vector2<float> Enemy::weapon_position() const {
 		auto bounds = this->sprite.getGlobalBounds();
 		return sf::Vector2<float>{bounds.left - 5.0f, bounds.top + bounds.height / 2};
@@ -47,6 +58,16 @@ namespace astroblaster {
 		if (weapon_clock.getElapsedTime().asSeconds() > 0.5f) {
 			weapon_clock.restart();
 			this->state.emplace_projectile(this->weapon_position(), false);
+		}
+		return;
+	}
+
+	void Enemy::deduce_energy(std::size_t damage) {
+		if (this->energy > damage) {
+			this->energy -= damage;
+		}
+		else {
+			this->energy = 0u;
 		}
 		return;
 	}

@@ -52,7 +52,10 @@ namespace astroblaster {
 			for (auto itr = this->projectiles.begin(); itr != this->projectiles.end(); ++itr) {
 				auto projectile_box = itr->get_collision_box();
 				if (enemy_box.intersects(projectile_box)) {
-					it = std::prev(this->enemies.erase(it));
+					it->collide_with(static_cast<unsigned int>(CollisionType::Projectile));
+					if (!it->get_energy()) {
+						it = std::prev(this->enemies.erase(it));
+					}
 					itr = std::prev(this->projectiles.erase(itr));
 				}
 			}

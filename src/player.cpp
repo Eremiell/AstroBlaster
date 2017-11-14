@@ -56,10 +56,10 @@ namespace astroblaster {
 
 	void Player::collide_with(unsigned int type) {
 		if (type & static_cast<unsigned int>(CollisionType::Enemy)) {
-			this->energy -= 20;
+			this->deduce_energy(20);
 		}
 		else if (type & static_cast<unsigned int>(CollisionType::Projectile)) {
-			this->energy -= 10;
+			this->deduce_energy(10);
 		}
 		return;
 	}
@@ -92,6 +92,16 @@ namespace astroblaster {
 		boundary.left = width;
 		if (this->sprite.getGlobalBounds().intersects(boundary, intersection)) {
 			this->sprite.move(-intersection.width, 0.0f);
+		}
+		return;
+	}
+
+	void Player::deduce_energy(std::size_t damage) {
+		if (this->energy > damage) {
+			this->energy -= damage;
+		}
+		else {
+			this->energy = 0u;
 		}
 		return;
 	}
