@@ -4,7 +4,7 @@
 
 namespace astroblaster {
 	MainState::MainState(sf::RenderWindow &window, TextureManager &tm) : State(window, tm), background(window, tm), player(window, tm), hud(window, tm) {
-		this->enemies.emplace_back(Enemy(this->window, this->tm));
+		this->enemies.emplace_back(Enemy(this->window, this->tm, *this));
 	}
 
 	MainState::~MainState() {}
@@ -57,6 +57,18 @@ namespace astroblaster {
 				}
 			}
 		}
+		for (auto it = this->projectiles.begin(); it != this->projectiles.end(); ++it) {
+			auto projectile_box = it->get_collision_box();
+			if (player_box.intersects(projectile_box)) {
+				this->player.collide_with(static_cast<unsigned int>(CollisionType::Projectile));
+				it = std::prev(this->projectiles.erase(it));
+			}
+		}
+		return;
+	}
+
+	void MainState::emplace_projectile(sf::Vector2<float> position, bool direction) {
+		this->projectiles.emplace_back(this->window, this->tm, position, direction);
 		return;
 	}
 }

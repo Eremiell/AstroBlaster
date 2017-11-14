@@ -58,10 +58,13 @@ namespace astroblaster {
 		if (type & static_cast<unsigned int>(CollisionType::Enemy)) {
 			this->energy -= 20;
 		}
+		else if (type & static_cast<unsigned int>(CollisionType::Projectile)) {
+			this->energy -= 10;
+		}
 		return;
 	}
 
-	std::size_t Player::get_energy() {
+	std::size_t Player::get_energy() const {
 		return this->energy;
 	}
 

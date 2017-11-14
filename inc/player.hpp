@@ -15,7 +15,7 @@ namespace astroblaster {
 			void render();
 			sf::Rect<float> get_collision_box() const;
 			void collide_with(unsigned int type);
-			std::size_t get_energy();
+			std::size_t get_energy() const;
 			sf::Vector2<float> weapon_position() const;
 		private:
 			sf::RenderWindow &window;

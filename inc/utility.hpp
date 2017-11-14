@@ -24,7 +24,8 @@ namespace astroblaster {
 	};
 
 	enum class CollisionType : unsigned int {
-		Enemy = 1 << 0
+		Enemy = 1 << 0,
+		Projectile = 1 << 1
 	};
 
 	std::string texture_not_found(std::string_view texture);

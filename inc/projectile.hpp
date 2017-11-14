@@ -11,7 +11,7 @@
 namespace astroblaster {
 	class Projectile {
 		public:
-			Projectile(sf::RenderWindow &window, TextureManager &tm, sf::Vector2<float> position, bool direction);
+			Projectile(sf::RenderWindow &window, TextureManager &tm, sf::Vector2<float> position, bool direction = true);
 			void integrate();
 			void render();
 			sf::Rect<float> get_collision_box();

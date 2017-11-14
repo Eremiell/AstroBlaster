@@ -11,6 +11,8 @@
 #include "inc/hud.hpp"
 
 namespace astroblaster {
+	class Enemy;
+
 	class MainState : public State {
 		public:
 			MainState(sf::RenderWindow &window, TextureManager &tm);
@@ -18,6 +20,7 @@ namespace astroblaster {
 			//virtual void input();
 			virtual void integrate(unsigned int controls) override;
 			virtual void render() override;
+			void emplace_projectile(sf::Vector2<float> position, bool direction = false);
 		private:
 			ParallaxBackground background;
 			Player player;

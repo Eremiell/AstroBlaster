@@ -1,14 +1,19 @@
 #include "inc/projectile.hpp"
+#include <string>
 #include "inc/utility.hpp"
 
 namespace astroblaster {
-	Projectile::Projectile(sf::RenderWindow &window, TextureManager &tm, sf::Vector2<float> position, bool direction = true) : window(window), direction(direction) {
+	Projectile::Projectile(sf::RenderWindow &window, TextureManager &tm, sf::Vector2<float> position, bool direction) : window(window), direction(direction) {
 		if (!tm.add_texture(u8"sheet.xml", static_cast<unsigned int>(TextureModes::Sheet))) {
 			throw file_not_found(u8"sheet.xml");
 		}
-		auto subtexture = tm.get_subtexture(u8"laserGreen05.png");
+		std::string texture_name = u8"laserGreen05.png";
+		if (!direction) {
+			texture_name = u8"laserRed03.png";
+		}
+		auto subtexture = tm.get_subtexture(texture_name);
 		if (!subtexture.first) {
-			throw texture_not_found(u8"laserGreen05.png");
+			throw texture_not_found(texture_name);
 		}
 		this->sprite.setTexture(*subtexture.first, true);
 		this->sprite.setTextureRect(subtexture.second);
