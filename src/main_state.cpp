@@ -3,22 +3,10 @@
 #include "inc/utility.hpp"
 
 namespace astroblaster {
-	MainState::MainState(sf::RenderWindow &window, TextureManager &tm) : State(window, tm), player(window, tm) {
+	MainState::MainState(sf::RenderWindow &window, TextureManager &tm) : State(window, tm), background(window, tm), player(window, tm) {
 		if (!this->tm.add_texture(u8"sheet.xml", static_cast<unsigned int>(TextureModes::Sheet))) {
 			throw file_not_found(u8"sheet.xml");
 		}
-		for (std::size_t i = 0; i < 8; ++i) {
-			if (!this->tm.add_texture(u8"bkgd_" + std::to_string(i) + u8".png", static_cast<unsigned int>(TextureModes::Repeat))) {
-				throw file_not_found(u8"bkgd_" + std::to_string(i) + u8".png");
-			}
-			auto texture = this->tm.get_texture(u8"bkgd_" + std::to_string(i) + u8".png");
-			if (!texture) {
-				throw texture_not_found(u8"bkgd_" + std::to_string(i) + u8".png");
-			}
-			this->bg_sprites[i].setTexture(*texture, true);
-			this->bg_sprites[i].setTextureRect(sf::Rect<int>(0, 0, 1600, 800));
-		}
-		//this->bg_sprites[0].setColor(sf::Color::Black);
 		this->font.loadFromFile("res/fon/kenvector_future_thin.ttf");
 		auto subtexture = this->tm.get_subtexture(u8"playerLife1_red.png");
 		if (!subtexture.first) {
@@ -58,19 +46,13 @@ namespace astroblaster {
 			projectile.integrate();
 		}
 		this->collide();
-		for (std::size_t i = 0; i < 8; ++i) {
-			auto rect = this->bg_sprites[i].getTextureRect();
-			rect.left += 1.0f * (i + 1);
-			this->bg_sprites[i].setTextureRect(rect);
-		}
+		this->background.integrate();
 		this->update_hud();
 		return;
 	}
 
 	void MainState::render() {
-		for (std::size_t i = 0; i < 8; ++i) {
-			this->window.draw(this->bg_sprites[i]);
-		}
+		this->background.render();
 		this->player.render();
 		for (auto &enemy : this->enemies) {
 			enemy.render();

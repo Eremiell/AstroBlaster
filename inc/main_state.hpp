@@ -3,7 +3,6 @@
 #define MAIN_STATE_HPP
 
 #include "inc/state.hpp"
-#include <array>
 #include <list>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Font.hpp>
@@ -12,6 +11,7 @@
 #include "inc/player.hpp"
 #include "inc/enemy.hpp"
 #include "inc/projectile.hpp"
+#include "inc/parallax_background.hpp"
 
 namespace astroblaster {
 	class MainState : public State {
@@ -22,8 +22,8 @@ namespace astroblaster {
 			virtual void integrate(unsigned int controls) override;
 			virtual void render() override;
 		private:
+			ParallaxBackground background;
 			Player player;
-			std::array<sf::Sprite, 8> bg_sprites;
 			sf::Font font;
 			sf::Sprite icon;
 			sf::RectangleShape life_bar;
