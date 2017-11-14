@@ -21,6 +21,7 @@ namespace astroblaster {
 			sf::RenderWindow &window;
 			std::size_t energy;
 			sf::Sprite sprite;
+			void collide_against_bounds();
 	};
 }
 

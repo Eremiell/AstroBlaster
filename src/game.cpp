@@ -6,7 +6,7 @@
 #include "inc/main_state.hpp"
 
 namespace astroblaster {
-	Game::Game() : window(sf::VideoMode(1600.0f, 800.0f), "AstroBlaster", sf::Style::Titlebar | sf::Style::Close), tm(), state(new MainState(this->window, this->tm)) {
+	Game::Game() : window(sf::VideoMode(width, height), "AstroBlaster", sf::Style::Titlebar | sf::Style::Close), tm(), state(new MainState(this->window, this->tm)) {
 		this->window.setKeyRepeatEnabled(false);
 	}
 

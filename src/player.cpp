@@ -41,6 +41,7 @@ namespace astroblaster {
 			movement.y *= speed;
 		}
 		this->sprite.move(movement);
+		this->collide_against_bounds();
 		return;
 	}
 
@@ -67,5 +68,28 @@ namespace astroblaster {
 	sf::Vector2<float> Player::weapon_position() const {
 		auto bounds = this->sprite.getGlobalBounds();
 		return sf::Vector2<float>{bounds.left + bounds.width + 5.0f, bounds.top + bounds.height / 2};
+	}
+
+	void Player::collide_against_bounds() {
+		sf::Rect<float> boundary{0.0f - 2 * speed, 0.0f - 2 * speed, width + 4 * speed, 2 * speed};
+		sf::Rect<float> intersection;
+		if (this->sprite.getGlobalBounds().intersects(boundary, intersection)) {
+			this->sprite.move(0.0f, intersection.height);
+		}
+		boundary.top = height;
+		if (this->sprite.getGlobalBounds().intersects(boundary, intersection)) {
+			this->sprite.move(0.0f, -intersection.height);
+		}
+		boundary.top = 0.0f - 2 * speed;
+		boundary.width = 2 * speed;
+		boundary.height = height + 4 * speed;
+		if (this->sprite.getGlobalBounds().intersects(boundary, intersection)) {
+			this->sprite.move(intersection.width, 0.0f);
+		}
+		boundary.left = width;
+		if (this->sprite.getGlobalBounds().intersects(boundary, intersection)) {
+			this->sprite.move(-intersection.width, 0.0f);
+		}
+		return;
 	}
 }

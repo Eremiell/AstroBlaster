@@ -11,7 +11,7 @@ namespace astroblaster {
 				throw texture_not_found(u8"bkgd_" + std::to_string(i) + u8".png");
 			}
 			this->bg_sprites[i].setTexture(*texture, true);
-			this->bg_sprites[i].setTextureRect(sf::Rect<int>(0, 0, 1600, 800));
+			this->bg_sprites[i].setTextureRect(sf::Rect<int>(0, 0, width, height));
 		}
 		//this->bg_sprites[0].setColor(sf::Color::Black);
 	}

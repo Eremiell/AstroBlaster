@@ -6,6 +6,8 @@
 #include <string_view>
 
 namespace astroblaster {
+	const float width = 1600.0f;
+	const float height = 800.0f;
 	const float speed = 7.0f;
 
 	enum class Controls : unsigned int {
