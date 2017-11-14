@@ -4,14 +4,11 @@
 
 #include "inc/state.hpp"
 #include <list>
-#include <SFML/Graphics/Sprite.hpp>
-#include <SFML/Graphics/Font.hpp>
-#include <SFML/Graphics/Text.hpp>
-#include <SFML/Graphics/RectangleShape.hpp>
 #include "inc/player.hpp"
 #include "inc/enemy.hpp"
 #include "inc/projectile.hpp"
 #include "inc/parallax_background.hpp"
+#include "inc/hud.hpp"
 
 namespace astroblaster {
 	class MainState : public State {
@@ -24,15 +21,10 @@ namespace astroblaster {
 		private:
 			ParallaxBackground background;
 			Player player;
-			sf::Font font;
-			sf::Sprite icon;
-			sf::RectangleShape life_bar;
-			sf::RectangleShape life_bar_outline;
-			sf::Text player_name;
+			HUD hud;
 			std::list<Enemy> enemies;
 			std::list<Projectile> projectiles;
 			void collide();
-			void update_hud();
 	};
 }
 
