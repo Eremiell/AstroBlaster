@@ -4,7 +4,7 @@
 
 namespace astroblaster {
 	MainState::MainState(sf::RenderWindow &window, TextureManager &tm) : State(window, tm), background(window, tm), player(window, tm), hud(window, tm) {
-		this->enemies.emplace_back(Enemy(this->window, this->tm, *this));
+		this->enemies.emplace_back(Enemy(this->window, this->tm, *this, Enemy::AI_TYPE::NORMAL));
 	}
 
 	MainState::~MainState() {}
@@ -17,7 +17,7 @@ namespace astroblaster {
 			this->projectiles.emplace_back(this->window, this->tm, this->player.weapon_position(), true);
 		}
 		for (auto &enemy : this->enemies) {
-			enemy.integrate();
+			enemy.integrate(this->player.weapon_position());
 		}
 		for (auto &projectile : this->projectiles) {
 			projectile.integrate();
