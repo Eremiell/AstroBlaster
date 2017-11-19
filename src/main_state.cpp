@@ -1,10 +1,9 @@
 #include "inc/main_state.hpp"
 #include <iterator>
-#include <SFML/System/Vector2.hpp>
 #include "inc/utility.hpp"
 
 namespace astroblaster {
-	MainState::MainState(sf::RenderWindow &window, TextureManager &tm) : State(window, tm), background(window, tm), player(window, tm), hud(window, tm) {
+	MainState::MainState(sf::RenderWindow &window, TextureManager &tm) : State(window, tm), background(window, tm), player(window, tm), hud(window, tm), generator(new LevelGenerator(*this)) {
 		this->enemies.emplace_back(Enemy(this->window, this->tm, *this, sf::Vector2<float>(1000.0f, 400.0f), AIType::NORMAL));
 	}
 
@@ -26,6 +25,7 @@ namespace astroblaster {
 		this->collide();
 		this->background.integrate();
 		this->hud.integrate(this->player.get_energy());
+		this->generator->generate();
 		return;
 	}
 
@@ -75,6 +75,11 @@ namespace astroblaster {
 
 	void MainState::emplace_projectile(sf::Vector2<float> position, bool direction) {
 		this->projectiles.emplace_back(this->window, this->tm, position, direction);
+		return;
+	}
+
+	void MainState::emplace_enemy(sf::Vector2<float> position, AIType type, bool up) {
+		this->enemies.emplace_back(this->window, this->tm, *this, position, type, up);
 		return;
 	}
 }
