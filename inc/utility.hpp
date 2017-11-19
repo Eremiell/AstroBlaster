@@ -28,6 +28,13 @@ namespace astroblaster {
 		Projectile = 1 << 1
 	};
 
+	enum class AIType : unsigned int {
+		NORMAL = 1 << 0,
+		MOVING = 1 << 1,
+		RAPID = 1 << 2,
+		SMART = 1 << 3
+	};
+
 	std::string texture_not_found(std::string_view texture);
 
 	std::string file_not_found(std::string_view file);

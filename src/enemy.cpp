@@ -1,25 +1,24 @@
 #include "inc/enemy.hpp"
 #include <string>
-#include <SFML/System/Clock.hpp>
 #include "inc/utility.hpp"
 
 namespace astroblaster {
-	Enemy::Enemy(sf::RenderWindow &window, TextureManager &tm, MainState &state, AI_TYPE type) : window(window), state(state), type(type), up(false), counter(0) {
+	Enemy::Enemy(sf::RenderWindow &window, TextureManager &tm, MainState &state, sf::Vector2<float> position, AIType type, bool up) : window(window), state(state), type(type), up(up), counter(0) {
 		std::string texture_name{u8"enemyBlack1.png"};
 		switch (this->type) {
-			case AI_TYPE::MOVING:
+			case AIType::MOVING:
 				texture_name = u8"enemyBlue3.png";
 				this->energy = 20;
 				break;
-			case AI_TYPE::RAPID:
+			case AIType::RAPID:
 				texture_name = u8"enemyRed5.png";
 				this->energy = 40;
 				break;
-			case AI_TYPE::SMART:
+			case AIType::SMART:
 				texture_name = u8"enemyGreen2.png";
 				this->energy = 60;
 				break;
-			case AI_TYPE::NORMAL:
+			case AIType::NORMAL:
 			default:
 				this->energy = 10;
 				break;
@@ -35,21 +34,21 @@ namespace astroblaster {
 		this->sprite.setTextureRect(subtexture.second);
 		this->sprite.setOrigin(subtexture.second.width / 2, subtexture.second.height / 2);
 		this->sprite.setRotation(90);
-		this->sprite.setPosition(1000.0f, 400.0f);
+		this->sprite.setPosition(position);
 	}
 
 	void Enemy::integrate(sf::Vector2<float> player_position) {
 		switch (this->type) {
-			case AI_TYPE::MOVING:
+			case AIType::MOVING:
 				this->integrate_moving();
 				break;
-			case AI_TYPE::RAPID:
+			case AIType::RAPID:
 				this->integrate_rapid();
 				break;
-			case AI_TYPE::SMART:
+			case AIType::SMART:
 				this->integrate_smart(player_position);
 				break;
-			case AI_TYPE::NORMAL:
+			case AIType::NORMAL:
 			default:
 				this->integrate_normal();
 				break;
@@ -83,7 +82,6 @@ namespace astroblaster {
 	}
 
 	void Enemy::integrate_normal() {
-		static sf::Clock weapon_clock;
 		this->sprite.move(-speed, 0.0f);
 		if (weapon_clock.getElapsedTime().asSeconds() > 0.5f) {
 			weapon_clock.restart();
@@ -93,7 +91,6 @@ namespace astroblaster {
 	}
 
 	void Enemy::integrate_moving() {
-		static sf::Clock weapon_clock;
 		this->sprite.move(-speed, this->up?-5.0f:5.0f);
 		++this->counter;
 		if (this->counter == 20u) {
@@ -108,7 +105,6 @@ namespace astroblaster {
 	}
 
 	void Enemy::integrate_rapid() {
-		static sf::Clock weapon_clock;
 		this->sprite.move(-speed, this->up?-10.0f:10.0f);
 		if (this->up && this->sprite.getGlobalBounds().top < 10.0f) {
 			this->up = false;
@@ -124,7 +120,6 @@ namespace astroblaster {
 	}
 
 	void Enemy::integrate_smart(sf::Vector2<float> player_position) {
-		static sf::Clock weapon_clock;
 		float follow{0.0f};
 		if (this->weapon_position().y - player_position.y > 25.0f) {
 			follow = -5.0f;

@@ -1,10 +1,11 @@
 #include "inc/main_state.hpp"
 #include <iterator>
+#include <SFML/System/Vector2.hpp>
 #include "inc/utility.hpp"
 
 namespace astroblaster {
 	MainState::MainState(sf::RenderWindow &window, TextureManager &tm) : State(window, tm), background(window, tm), player(window, tm), hud(window, tm) {
-		this->enemies.emplace_back(Enemy(this->window, this->tm, *this, Enemy::AI_TYPE::NORMAL));
+		this->enemies.emplace_back(Enemy(this->window, this->tm, *this, sf::Vector2<float>(1000.0f, 400.0f), AIType::NORMAL));
 	}
 
 	MainState::~MainState() {}
@@ -48,6 +49,7 @@ namespace astroblaster {
 			if (player_box.intersects(enemy_box)) {
 				this->player.collide_with(static_cast<unsigned int>(CollisionType::Enemy));
 				it = std::prev(this->enemies.erase(it));
+				continue;
 			}
 			for (auto itr = this->projectiles.begin(); itr != this->projectiles.end(); ++itr) {
 				auto projectile_box = itr->get_collision_box();
@@ -57,6 +59,7 @@ namespace astroblaster {
 						it = std::prev(this->enemies.erase(it));
 					}
 					itr = std::prev(this->projectiles.erase(itr));
+					break;
 				}
 			}
 		}

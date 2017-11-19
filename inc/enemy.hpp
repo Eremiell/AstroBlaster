@@ -6,21 +6,17 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/System/Vector2.hpp>
+#include <SFML/System/Clock.hpp>
 #include "inc/texture_manager.hpp"
 #include "inc/main_state.hpp"
+#include "inc/utility.hpp"
 
 namespace astroblaster {
 	class MainState;
 
 	class Enemy {
 		public:
-			enum class AI_TYPE : unsigned int {
-				NORMAL = 1 << 0,
-				MOVING = 1 << 1,
-				RAPID = 1 << 2,
-				SMART = 1 << 3
-			};
-			Enemy(sf::RenderWindow &window, TextureManager &tm, MainState &state, AI_TYPE type = AI_TYPE::NORMAL);
+			Enemy(sf::RenderWindow &window, TextureManager &tm, MainState &state, sf::Vector2<float> position, AIType type = AIType::NORMAL, bool up = false);
 			void integrate(sf::Vector2<float> player_position);
 			void render();
 			sf::Rect<float> get_collision_box() const;
@@ -30,9 +26,10 @@ namespace astroblaster {
 		private:
 			sf::RenderWindow &window;
 			MainState &state;
-			AI_TYPE type;
+			AIType type;
 			bool up;
-			std::size_t counter;
+			unsigned int counter;
+			sf::Clock weapon_clock;
 			std::size_t energy;
 			sf::Sprite sprite;
 			void integrate_normal();
