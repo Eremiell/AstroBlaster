@@ -3,9 +3,7 @@
 #include "inc/utility.hpp"
 
 namespace astroblaster {
-	MainState::MainState(sf::RenderWindow &window, TextureManager &tm) : State(window, tm), background(window, tm), player(window, tm), hud(window, tm), generator(new LevelGenerator(*this)) {
-		this->enemies.emplace_back(Enemy(this->window, this->tm, *this, sf::Vector2<float>(1000.0f, 400.0f), AIType::NORMAL));
-	}
+	MainState::MainState(sf::RenderWindow &window, TextureManager &tm) : State(window, tm), background(window, tm), player(window, tm), hud(window, tm), generator(new LevelGenerator(*this)) {}
 
 	MainState::~MainState() {}
 
