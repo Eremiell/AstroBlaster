@@ -37,6 +37,7 @@ namespace astroblaster {
 			void integrate_rapid();
 			void integrate_smart(sf::Vector2<float> player_position);
 			void deduce_energy(std::size_t damage);
+			void fire();
 	};
 }
 

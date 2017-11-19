@@ -85,7 +85,7 @@ namespace astroblaster {
 		this->sprite.move(-speed, 0.0f);
 		if (weapon_clock.getElapsedTime().asSeconds() > 0.5f) {
 			weapon_clock.restart();
-			this->state.emplace_projectile(this->weapon_position(), false);
+			this->fire();
 		}
 		return;
 	}
@@ -99,7 +99,7 @@ namespace astroblaster {
 		}
 		if (weapon_clock.getElapsedTime().asSeconds() > 0.5f) {
 			weapon_clock.restart();
-			this->state.emplace_projectile(this->weapon_position(), false);
+			this->fire();
 		}
 		return;
 	}
@@ -114,7 +114,7 @@ namespace astroblaster {
 		}
 		if (weapon_clock.getElapsedTime().asSeconds() > 0.3f) {
 			weapon_clock.restart();
-			this->state.emplace_projectile(this->weapon_position(), false);
+			this->fire();
 		}
 		return;
 	}
@@ -130,7 +130,7 @@ namespace astroblaster {
 		this->sprite.move(-speed, follow);
 		if (weapon_clock.getElapsedTime().asSeconds() > 0.4f) {
 			weapon_clock.restart();
-			this->state.emplace_projectile(this->weapon_position(), false);
+			this->fire();
 		}
 		return;
 	}
@@ -141,6 +141,14 @@ namespace astroblaster {
 		}
 		else {
 			this->energy = 0u;
+		}
+		return;
+	}
+
+	void Enemy::fire() {
+		sf::Rect<float> window_box(0.0f, 0.0f, this->window.getSize().x, this->window.getSize().y);
+		if (window_box.contains(this->sprite.getPosition())) {
+			this->state.emplace_projectile(this->weapon_position(), false);
 		}
 		return;
 	}
