@@ -91,11 +91,11 @@ namespace astroblaster {
 	}
 
 	void Enemy::integrate_moving() {
-		this->sprite.move(-speed, this->up?-5.0f:5.0f);
+		this->sprite.move(-speed, this->up?-3.0f:3.0f);
 		++this->counter;
-		if (this->counter == 20u) {
+		if (this->counter == 50u) {
 			this->up = !this->up;
-			this->counter = 0u;
+			this->counter = -50u;
 		}
 		if (weapon_clock.getElapsedTime().asSeconds() > 0.5f) {
 			weapon_clock.restart();
