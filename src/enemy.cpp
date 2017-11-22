@@ -3,24 +3,26 @@
 #include "inc/utility.hpp"
 
 namespace astroblaster {
-	Enemy::Enemy(sf::RenderWindow &window, TextureManager &tm, MainState &state, sf::Vector2<float> position, AIType type, bool up) : window(window), state(state), type(type), up(up), counter(0) {
+	Enemy::Enemy(sf::RenderWindow &window, TextureManager &tm, MainState &state, sf::Vector2<float> position, AIType type, bool up) : window(window), state(state), type(type), up(up), counter(0), energy(10), score(10) {
 		std::string texture_name{u8"enemyBlack1.png"};
 		switch (this->type) {
 			case AIType::MOVING:
 				texture_name = u8"enemyBlue3.png";
 				this->energy = 20;
+				this->score = 20;
 				break;
 			case AIType::RAPID:
 				texture_name = u8"enemyRed5.png";
 				this->energy = 40;
+				this->score = 60;
 				break;
 			case AIType::SMART:
 				texture_name = u8"enemyGreen2.png";
 				this->energy = 60;
+				this->score = 50;
 				break;
 			case AIType::NORMAL:
 			default:
-				this->energy = 10;
 				break;
 		}
 		if (!tm.add_texture(u8"sheet.xml", static_cast<unsigned int>(TextureModes::Sheet))) {
@@ -74,6 +76,10 @@ namespace astroblaster {
 
 	std::size_t Enemy::get_energy() const {
 		return this->energy;
+	}
+
+	std::size_t Enemy::get_score() const {
+		return this->score;
 	}
 
 	sf::Vector2<float> Enemy::weapon_position() const {

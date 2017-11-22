@@ -3,7 +3,7 @@
 #include "inc/utility.hpp"
 
 namespace astroblaster {
-	Player::Player(sf::RenderWindow &window, TextureManager &tm) : window(window), energy(100) {
+	Player::Player(sf::RenderWindow &window, TextureManager &tm) : window(window), energy(100u), lifes(3u), score(0ull) {
 		if (!tm.add_texture(u8"sheet.xml", static_cast<unsigned int>(TextureModes::Sheet))) {
 			throw file_not_found(u8"sheet.xml");
 		}
@@ -68,6 +68,19 @@ namespace astroblaster {
 		return this->energy;
 	}
 
+	std::size_t Player::get_lifes() const {
+		return this->lifes;
+	}
+
+	std::uint64_t Player::get_score() const {
+		return this->score;
+	}
+
+	void Player::add_score(std::size_t score) {
+		this->score += score;
+		return;
+	}
+
 	sf::Vector2<float> Player::weapon_position() const {
 		auto bounds = this->sprite.getGlobalBounds();
 		return sf::Vector2<float>{bounds.left + bounds.width + 5.0f, bounds.top + bounds.height / 2};
@@ -101,7 +114,13 @@ namespace astroblaster {
 			this->energy -= damage;
 		}
 		else {
-			this->energy = 0u;
+			if (this->lifes > 1) {
+				this->energy = 100u;
+			}
+			else {
+				this->energy = 0u;
+			}
+			--this->lifes;
 		}
 		return;
 	}

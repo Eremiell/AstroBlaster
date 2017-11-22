@@ -22,7 +22,7 @@ namespace astroblaster {
 		}
 		this->collide();
 		this->background.integrate();
-		this->hud.integrate(this->player.get_energy());
+		this->hud.integrate(this->player.get_energy(), this->player.get_lifes(), this->player.get_score());
 		this->generator->generate();
 		return;
 	}
@@ -46,6 +46,7 @@ namespace astroblaster {
 			auto enemy_box = it->get_collision_box();
 			if (player_box.intersects(enemy_box)) {
 				this->player.collide_with(static_cast<unsigned int>(CollisionType::Enemy));
+				this->player.add_score(it->get_score());
 				it = std::prev(this->enemies.erase(it));
 				continue;
 			}
@@ -54,6 +55,7 @@ namespace astroblaster {
 				if (enemy_box.intersects(projectile_box)) {
 					it->collide_with(static_cast<unsigned int>(CollisionType::Projectile));
 					if (!it->get_energy()) {
+						this->player.add_score(it->get_score());
 						it = std::prev(this->enemies.erase(it));
 					}
 					itr = std::prev(this->projectiles.erase(itr));
