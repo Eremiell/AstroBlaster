@@ -65,7 +65,7 @@ namespace astroblaster {
 			this->player_score_text.setString(std::to_string(this->player_score.at(i)));
 			this->player_score_text.setPosition(360.0f, 12.0f + i * 30.0f);
 			for (std::size_t j = 1; j <= 3; ++j) {
-				std::next(this->icons.begin(), i)->setPosition(110.0f + (j - 1) * 40.f, 20.0f);
+				std::next(this->icons.begin(), i)->setPosition(110.0f + (j - 1) * 40.f, 20.0f + i * 30.0f);
 				if (j > this->player_lives.at(i)) {
 					std::next(this->icons.begin(), i)->setColor(sf::Color(0x77, 0x77, 0x77));
 				}

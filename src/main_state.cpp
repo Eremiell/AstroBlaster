@@ -4,20 +4,17 @@
 #include "inc/utility.hpp"
 
 namespace astroblaster {
-	MainState::MainState(sf::RenderWindow &window, TextureManager &tm) : State(window, tm), background(window, tm), hud(window, tm, {u8"PL1"}), generator(new LevelGenerator(*this)) {
-		this->players.emplace_back(this->window, this->tm, u8"PL1");
+	MainState::MainState(sf::RenderWindow &window, TextureManager &tm, std::size_t players) : State(window, tm), background(window, tm), hud(window, tm, (players==1)?(std::vector<std::string>{u8"PL1"}):(std::vector<std::string>{u8"PL1", u8"PL2"})), generator(new LevelGenerator(*this)) {
+		for (std::size_t i = 0; i < players; ++i) {
+			this->players.emplace_back(this->window, this->tm, *this, u8"PL" + std::to_string(i), i, players > 1);
+		}
 	}
 
 	MainState::~MainState() {}
 
 	void MainState::integrate(unsigned int controls) {
-		static sf::Clock weapon_cooldown;
 		for (auto &player : players) {
 			player.integrate(controls);
-		}
-		if (controls & static_cast<unsigned int>(Controls::Space) && weapon_cooldown.getElapsedTime().asSeconds() >= 0.1f) {
-			weapon_cooldown.restart();
-			this->projectiles.emplace_back(this->window, this->tm, this->players.front().weapon_position(), true);
 		}
 		for (auto &enemy : this->enemies) {
 			enemy.integrate(std::accumulate(this->players.begin(), this->players.end(), std::vector<sf::Vector2<float>>(), accumulate_position));
@@ -60,10 +57,10 @@ namespace astroblaster {
 				}
 				for (auto itr = this->projectiles.begin(); itr != this->projectiles.end(); ++itr) {
 					auto projectile_box = itr->get_collision_box();
-					if (enemy_box.intersects(projectile_box)) {
+					if (itr->get_direction() && enemy_box.intersects(projectile_box)) {
 						it->collide_with(static_cast<unsigned int>(CollisionType::Projectile));
 						if (!it->get_energy()) {
-							player.add_score(it->get_score());
+							std::next(this->players.begin(), itr->get_source())->add_score(it->get_score());
 							it = std::prev(this->enemies.erase(it));
 						}
 						itr = std::prev(this->projectiles.erase(itr));
@@ -73,7 +70,7 @@ namespace astroblaster {
 			}
 			for (auto it = this->projectiles.begin(); it != this->projectiles.end(); ++it) {
 				auto projectile_box = it->get_collision_box();
-				if (player_box.intersects(projectile_box)) {
+				if (!it->get_direction() && player_box.intersects(projectile_box)) {
 					player.collide_with(static_cast<unsigned int>(CollisionType::Projectile));
 					it = std::prev(this->projectiles.erase(it));
 				}
@@ -82,8 +79,8 @@ namespace astroblaster {
 		return;
 	}
 
-	void MainState::emplace_projectile(sf::Vector2<float> position, bool direction) {
-		this->projectiles.emplace_back(this->window, this->tm, position, direction);
+	void MainState::emplace_projectile(sf::Vector2<float> position, bool direction, std::size_t source) {
+		this->projectiles.emplace_back(this->window, this->tm, position, direction, source);
 		return;
 	}
 

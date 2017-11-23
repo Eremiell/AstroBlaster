@@ -11,13 +11,16 @@
 namespace astroblaster {
 	class Projectile {
 		public:
-			Projectile(sf::RenderWindow &window, TextureManager &tm, sf::Vector2<float> position, bool direction = true);
+			Projectile(sf::RenderWindow &window, TextureManager &tm, sf::Vector2<float> position, bool direction = true, std::size_t source = 100u);
 			void integrate();
 			void render();
+			bool get_direction() const;
+			std::size_t get_source() const;
 			sf::Rect<float> get_collision_box();
 		private:
 			sf::RenderWindow &window;
 			bool direction;
+			std::size_t source;
 			sf::Sprite sprite;
 	};
 }

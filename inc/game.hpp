@@ -10,7 +10,7 @@
 namespace astroblaster {
 	class Game {
 		public:
-			Game();
+			Game(std::size_t players);
 			void run();
 		private:
 			sf::RenderWindow window;

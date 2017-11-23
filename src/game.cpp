@@ -6,7 +6,7 @@
 #include "inc/main_state.hpp"
 
 namespace astroblaster {
-	Game::Game() : window(sf::VideoMode(width, height), "AstroBlaster", sf::Style::Titlebar | sf::Style::Close), tm(), state(new MainState(this->window, this->tm)) {
+	Game::Game(std::size_t players) : window(sf::VideoMode(width, height), "AstroBlaster", sf::Style::Titlebar | sf::Style::Close), tm(), state(new MainState(this->window, this->tm, players)) {
 		this->window.setKeyRepeatEnabled(false);
 	}
 
@@ -29,20 +29,35 @@ namespace astroblaster {
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::RControl))) {
 				running = false;
 			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-				controls |= static_cast<unsigned int>(Controls::Up);
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+				controls |= static_cast<unsigned int>(Controls::P1Up);
 			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-				controls |= static_cast<unsigned int>(Controls::Down);
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+				controls |= static_cast<unsigned int>(Controls::P1Down);
 			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-				controls |= static_cast<unsigned int>(Controls::Left);
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+				controls |= static_cast<unsigned int>(Controls::P1Left);
 			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-				controls |= static_cast<unsigned int>(Controls::Right);
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+				controls |= static_cast<unsigned int>(Controls::P1Right);
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
+				controls |= static_cast<unsigned int>(Controls::P1Shoot);
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+				controls |= static_cast<unsigned int>(Controls::P2Up);
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+				controls |= static_cast<unsigned int>(Controls::P2Down);
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+				controls |= static_cast<unsigned int>(Controls::P2Left);
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+				controls |= static_cast<unsigned int>(Controls::P2Right);
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-				controls |= static_cast<unsigned int>(Controls::Space);
+				controls |= static_cast<unsigned int>(Controls::P2Shoot);
 			}
 			while (accumulator >= dt) {
 				this->state->integrate(controls);

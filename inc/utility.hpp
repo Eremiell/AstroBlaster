@@ -14,11 +14,16 @@ namespace astroblaster {
 	const std::array<std::string, 4> colours{"red", "green", "blue", "orange"};
 
 	enum class Controls : unsigned int {
-		Up = 1 << 0,
-		Down = 1 << 1,
-		Left = 1 << 2,
-		Right = 1 << 3,
-		Space = 1 << 4
+		P1Up = 1 << 0,
+		P1Down = 1 << 1,
+		P1Left = 1 << 2,
+		P1Right = 1 << 3,
+		P1Shoot = 1 << 4,
+		P2Up = 1 << 5,
+		P2Down = 1 << 6,
+		P2Left = 1 << 7,
+		P2Right = 1 << 8,
+		P2Shoot = 1 << 9
 	};
 
 	enum class TextureModes : unsigned int {

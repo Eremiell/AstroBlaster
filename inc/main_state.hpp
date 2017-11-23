@@ -17,15 +17,16 @@
 namespace astroblaster {
 	class Enemy;
 	class LevelGenerator;
+	class Player;
 
 	class MainState : public State {
 		public:
-			MainState(sf::RenderWindow &window, TextureManager &tm);
+			MainState(sf::RenderWindow &window, TextureManager &tm, std::size_t players = 1);
 			virtual ~MainState();
 			//virtual void input();
 			virtual void integrate(unsigned int controls) override;
 			virtual void render() override;
-			void emplace_projectile(sf::Vector2<float> position, bool direction = false);
+			void emplace_projectile(sf::Vector2<float> position, bool direction = false, std::size_t source = 100u);
 			void emplace_enemy(sf::Vector2<float> position, AIType type = AIType::NORMAL, bool up = false);
 		private:
 			ParallaxBackground background;

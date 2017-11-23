@@ -164,7 +164,7 @@ namespace astroblaster {
 	void Enemy::fire() {
 		sf::Rect<float> window_box(0.0f, 0.0f, this->window.getSize().x, this->window.getSize().y);
 		if (window_box.contains(this->sprite.getPosition())) {
-			this->state.emplace_projectile(this->weapon_position(), false);
+			this->state.emplace_projectile(this->weapon_position(), false, 100u);
 		}
 		return;
 	}

@@ -3,7 +3,7 @@
 #include "inc/utility.hpp"
 
 namespace astroblaster {
-	Projectile::Projectile(sf::RenderWindow &window, TextureManager &tm, sf::Vector2<float> position, bool direction) : window(window), direction(direction) {
+	Projectile::Projectile(sf::RenderWindow &window, TextureManager &tm, sf::Vector2<float> position, bool direction, std::size_t source) : window(window), direction(direction), source(source) {
 		if (!tm.add_texture(u8"sheet.xml", static_cast<unsigned int>(TextureModes::Sheet))) {
 			throw file_not_found(u8"sheet.xml");
 		}
@@ -35,6 +35,14 @@ namespace astroblaster {
 	void Projectile::render() {
 		this->window.draw(this->sprite);
 		return;
+	}
+
+	bool Projectile::get_direction() const {
+		return this->direction;
+	}
+
+	std::size_t Projectile::get_source() const {
+		return this->source;
 	}
 
 	sf::Rect<float> Projectile::get_collision_box() {

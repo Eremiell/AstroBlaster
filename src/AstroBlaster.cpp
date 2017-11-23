@@ -3,9 +3,13 @@
 #include <exception>
 #include "inc/game.hpp"
 
-int main() {
+int main(int argc, char **argv) {
+	std::size_t players = 1;
+	if (argc > 1 && std::string(argv[1]) == "--multiplayer") {
+		players = 2;
+	}
 	try {
-		astroblaster::Game game;
+		astroblaster::Game game(players);
 		game.run();
 	}
 	catch (std::string s) {

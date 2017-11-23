@@ -3,7 +3,7 @@
 #include "inc/utility.hpp"
 
 namespace astroblaster {
-	Player::Player(sf::RenderWindow &window, TextureManager &tm, std::string name, std::size_t number) : window(window), name(name), energy(100u), lives(3u), score(0ull) {
+	Player::Player(sf::RenderWindow &window, TextureManager &tm, MainState &state, std::string name, std::size_t number, bool multiplayer) : window(window), state(state), name(name), energy(100u), lives(3u), score(0ull), number(number), multiplayer(multiplayer) {
 		if (!tm.add_texture(u8"sheet.xml", static_cast<unsigned int>(TextureModes::Sheet))) {
 			throw file_not_found(u8"sheet.xml");
 		}
@@ -16,21 +16,73 @@ namespace astroblaster {
 		this->sprite.setOrigin(subtexture.second.width / 2, subtexture.second.height / 2);
 		this->sprite.setRotation(90);
 		this->sprite.setPosition(600.0f, 400.0f);
+		if (multiplayer) {
+			if (number == 1) {
+				this->sprite.setPosition(600.0f, 300.0f);
+			}
+			else {
+				this->sprite.setPosition(600.0f, 500.0f);
+			}
+		}
 	}
 
 	void Player::integrate(unsigned int controls) {
 		sf::Vector2<float> movement(0.0f, 0.0f);
-		if ((controls & static_cast<unsigned int>(Controls::Up)) && !(controls & static_cast<unsigned int>(Controls::Down))) {
-			movement.y -= 1.0f;
+		if (multiplayer) {
+			if (!this->number) {
+				if ((controls & static_cast<unsigned int>(Controls::P1Up)) && !(controls & static_cast<unsigned int>(Controls::P1Down))) {
+					movement.y -= 1.0f;
+				}
+				else if ((controls & static_cast<unsigned int>(Controls::P1Down)) && !(controls & static_cast<unsigned int>(Controls::P1Up))) {
+					movement.y += 1.0f;
+				}
+				if ((controls & static_cast<unsigned int>(Controls::P1Left)) && !(controls & static_cast<unsigned int>(Controls::P1Right))) {
+					movement.x -= 1.0f;
+				}
+				else if ((controls & static_cast<unsigned int>(Controls::P1Right)) && !(controls & static_cast<unsigned int>(Controls::P1Left))) {
+					movement.x += 1.0f;
+				}
+				if (controls & static_cast<unsigned int>(Controls::P1Shoot) && this->weapon_cooldown.getElapsedTime().asSeconds() >= 0.1f) {
+					this->weapon_cooldown.restart();
+					this->state.emplace_projectile(this->weapon_position(), true, this->number);
+				}
+			}
+			else {
+				if ((controls & static_cast<unsigned int>(Controls::P2Up)) && !(controls & static_cast<unsigned int>(Controls::P2Down))) {
+					movement.y -= 1.0f;
+				}
+				else if ((controls & static_cast<unsigned int>(Controls::P2Down)) && !(controls & static_cast<unsigned int>(Controls::P2Up))) {
+					movement.y += 1.0f;
+				}
+				if ((controls & static_cast<unsigned int>(Controls::P2Left)) && !(controls & static_cast<unsigned int>(Controls::P2Right))) {
+					movement.x -= 1.0f;
+				}
+				else if ((controls & static_cast<unsigned int>(Controls::P2Right)) && !(controls & static_cast<unsigned int>(Controls::P2Left))) {
+					movement.x += 1.0f;
+				}
+				if (controls & static_cast<unsigned int>(Controls::P2Shoot) && this->weapon_cooldown.getElapsedTime().asSeconds() >= 0.1f) {
+					this->weapon_cooldown.restart();
+					this->state.emplace_projectile(this->weapon_position(), true, this->number);
+				}
+			}
 		}
-		else if ((controls & static_cast<unsigned int>(Controls::Down)) && !(controls & static_cast<unsigned int>(Controls::Up))) {
-			movement.y += 1.0f;
-		}
-		if ((controls & static_cast<unsigned int>(Controls::Left)) && !(controls & static_cast<unsigned int>(Controls::Right))) {
-			movement.x -= 1.0f;
-		}
-		else if ((controls & static_cast<unsigned int>(Controls::Right)) && !(controls & static_cast<unsigned int>(Controls::Left))) {
-			movement.x += 1.0f;
+		else {
+			if ((controls & static_cast<unsigned int>(Controls::P1Up) || controls & static_cast<unsigned int>(Controls::P2Up)) && !(controls & static_cast<unsigned int>(Controls::P1Down) || controls & static_cast<unsigned int>(Controls::P2Down))) {
+				movement.y -= 1.0f;
+			}
+			if ((controls & static_cast<unsigned int>(Controls::P1Down) || controls & static_cast<unsigned int>(Controls::P2Down)) && !(controls & static_cast<unsigned int>(Controls::P1Up) || controls & static_cast<unsigned int>(Controls::P2Up))) {
+				movement.y += 1.0f;
+			}
+			if ((controls & static_cast<unsigned int>(Controls::P1Left) || controls & static_cast<unsigned int>(Controls::P2Left)) && !(controls & static_cast<unsigned int>(Controls::P1Right) || controls & static_cast<unsigned int>(Controls::P2Right))) {
+				movement.x -= 1.0f;
+			}
+			if ((controls & static_cast<unsigned int>(Controls::P1Right) || controls & static_cast<unsigned int>(Controls::P2Right)) && !(controls & static_cast<unsigned int>(Controls::P1Left) || controls & static_cast<unsigned int>(Controls::P2Left))) {
+				movement.x += 1.0f;
+			}
+			if ((controls & static_cast<unsigned int>(Controls::P1Shoot) || controls & static_cast<unsigned int>(Controls::P2Shoot)) && this->weapon_cooldown.getElapsedTime().asSeconds() >= 0.1f) {
+				this->weapon_cooldown.restart();
+				this->state.emplace_projectile(this->weapon_position(), true, this->number);
+			}
 		}
 		if ((std::fabs(movement.x) > 0.001f) && (std::fabs(movement.y) > 0.001f)) {
 			movement.x *= std::sqrt(speed * speed / 2);
