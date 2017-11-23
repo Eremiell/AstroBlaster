@@ -17,14 +17,14 @@ namespace astroblaster {
 			sf::Rect<float> get_collision_box() const;
 			void collide_with(unsigned int type);
 			std::size_t get_energy() const;
-			std::size_t get_lifes() const;
+			std::size_t get_lives() const;
 			std::uint64_t get_score() const;
 			void add_score(std::size_t score);
 			sf::Vector2<float> weapon_position() const;
 		private:
 			sf::RenderWindow &window;
 			std::size_t energy;
-			std::size_t lifes;
+			std::size_t lives;
 			std::uint64_t score;
 			sf::Sprite sprite;
 			void collide_against_bounds();

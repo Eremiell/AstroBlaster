@@ -22,7 +22,7 @@ namespace astroblaster {
 		}
 		this->collide();
 		this->background.integrate();
-		this->hud.integrate(this->player.get_energy(), this->player.get_lifes(), this->player.get_score());
+		this->hud.integrate(this->player.get_energy(), this->player.get_lives(), this->player.get_score());
 		this->generator->generate();
 		return;
 	}

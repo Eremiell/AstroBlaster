@@ -20,7 +20,7 @@ namespace astroblaster {
 			void render();
 		private:
 			sf::RenderWindow &window;
-			std::size_t player_lifes;
+			std::size_t player_lives;
 			sf::Font font;
 			sf::Sprite icon;
 			sf::RectangleShape life_bar;

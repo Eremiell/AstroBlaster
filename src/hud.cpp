@@ -1,7 +1,7 @@
 #include "inc/hud.hpp"
 
 namespace astroblaster {
-	HUD::HUD(sf::RenderWindow &window, TextureManager &tm, std::string player_name) : window(window), player_lifes(3) {
+	HUD::HUD(sf::RenderWindow &window, TextureManager &tm, std::string player_name) : window(window), player_lives(3) {
 		if (!tm.add_texture(u8"sheet.xml", static_cast<unsigned int>(TextureModes::Sheet))) {
 			throw file_not_found(u8"sheet.xml");
 		}
@@ -37,7 +37,7 @@ namespace astroblaster {
 		this->player_score.setPosition(360.0f, 12.0f);
 	}
 
-	void HUD::integrate(std::size_t player_energy, std::size_t player_lifes, std::uint64_t player_score) {
+	void HUD::integrate(std::size_t player_energy, std::size_t player_lives, std::uint64_t player_score) {
 		this->life_bar.setSize(sf::Vector2<float>(static_cast<float>(player_energy), 20.0f));
 		if (player_energy <= 30) {
 			this->life_bar.setFillColor(sf::Color::Red);
@@ -48,7 +48,7 @@ namespace astroblaster {
 		else {
 			this->life_bar.setFillColor(sf::Color::Green);
 		}
-		this->player_lifes = player_lifes;
+		this->player_lives = player_lives;
 		this->player_score.setString(std::to_string(player_score));
 		return;
 	}
@@ -56,7 +56,7 @@ namespace astroblaster {
 	void HUD::render() {
 		for (std::size_t i = 1; i <= 3; ++i) {
 			this->icon.setPosition(110.0f + (i - 1) * 40.f, 20.0f);
-			if (i > this->player_lifes) {
+			if (i > this->player_lives) {
 				this->icon.setColor(sf::Color(0x77, 0x77, 0x77));
 			}
 			else {
