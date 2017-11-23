@@ -4,6 +4,8 @@
 
 #include <string>
 #include <cstdint>
+#include <vector>
+#include <list>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Font.hpp>
@@ -15,18 +17,21 @@
 namespace astroblaster {
 	class HUD {
 		public:
-			HUD(sf::RenderWindow &window, TextureManager &tm, std::string player_name = u8"PLR");
-			void integrate(std::size_t player_energy, std::size_t player_lifes, std::uint64_t player_score);
+			HUD(sf::RenderWindow &window, TextureManager &tm, std::vector<std::string> player_names = {u8"PLR"});
+			void integrate(std::vector<std::size_t> player_energy, std::vector<std::size_t> player_lives, std::vector<std::uint64_t> player_score);
 			void render();
 		private:
 			sf::RenderWindow &window;
-			std::size_t player_lives;
+			std::size_t players;
+			std::vector<std::size_t> player_lives;
+			std::vector<std::size_t> player_energy;
+			std::vector<std::uint64_t> player_score;
 			sf::Font font;
-			sf::Sprite icon;
-			sf::RectangleShape life_bar;
-			sf::RectangleShape life_bar_outline;
-			sf::Text player_name;
-			sf::Text player_score;
+			std::list<sf::Sprite> icons;
+			sf::RectangleShape energy_bar;
+			sf::RectangleShape energy_bar_outline;
+			std::list<sf::Text> player_names;
+			sf::Text player_score_text;
 	};
 }
 

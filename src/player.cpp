@@ -3,13 +3,13 @@
 #include "inc/utility.hpp"
 
 namespace astroblaster {
-	Player::Player(sf::RenderWindow &window, TextureManager &tm) : window(window), energy(100u), lives(3u), score(0ull) {
+	Player::Player(sf::RenderWindow &window, TextureManager &tm, std::string name, std::size_t number) : window(window), name(name), energy(100u), lives(3u), score(0ull) {
 		if (!tm.add_texture(u8"sheet.xml", static_cast<unsigned int>(TextureModes::Sheet))) {
 			throw file_not_found(u8"sheet.xml");
 		}
-		auto subtexture = tm.get_subtexture(u8"playerShip1_red.png");
+		auto subtexture = tm.get_subtexture(u8"playerShip1_" + colours.at(number) + ".png");
 		if (!subtexture.first) {
-			throw texture_not_found(u8"playerShip1_red.png");
+			throw texture_not_found(u8"playerShip1_" + colours.at(number) + ".png");
 		}
 		this->sprite.setTexture(*subtexture.first, true);
 		this->sprite.setTextureRect(subtexture.second);
@@ -74,6 +74,10 @@ namespace astroblaster {
 
 	std::uint64_t Player::get_score() const {
 		return this->score;
+	}
+
+	std::string Player::get_name() const {
+		return this->name;
 	}
 
 	void Player::add_score(std::size_t score) {

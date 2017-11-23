@@ -2,6 +2,7 @@
 #ifndef ENEMY_HPP
 #define ENEMY_HPP
 
+#include <vector>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Rect.hpp>
@@ -17,7 +18,7 @@ namespace astroblaster {
 	class Enemy {
 		public:
 			Enemy(sf::RenderWindow &window, TextureManager &tm, MainState &state, sf::Vector2<float> position, AIType type = AIType::NORMAL, bool up = false);
-			void integrate(sf::Vector2<float> player_position);
+			void integrate(std::vector<sf::Vector2<float>> player_positions);
 			void render();
 			sf::Rect<float> get_collision_box() const;
 			void collide_with(unsigned int type);
@@ -37,7 +38,7 @@ namespace astroblaster {
 			void integrate_normal();
 			void integrate_moving();
 			void integrate_rapid();
-			void integrate_smart(sf::Vector2<float> player_position);
+			void integrate_smart(std::vector<sf::Vector2<float>> player_positions);
 			void deduce_energy(std::size_t damage);
 			void fire();
 	};

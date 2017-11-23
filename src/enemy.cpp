@@ -1,5 +1,7 @@
 #include "inc/enemy.hpp"
 #include <string>
+#include <limits>
+#include <cmath>
 #include "inc/utility.hpp"
 
 namespace astroblaster {
@@ -39,7 +41,7 @@ namespace astroblaster {
 		this->sprite.setPosition(position);
 	}
 
-	void Enemy::integrate(sf::Vector2<float> player_position) {
+	void Enemy::integrate(std::vector<sf::Vector2<float>> player_positions) {
 		switch (this->type) {
 			case AIType::MOVING:
 				this->integrate_moving();
@@ -48,7 +50,7 @@ namespace astroblaster {
 				this->integrate_rapid();
 				break;
 			case AIType::SMART:
-				this->integrate_smart(player_position);
+				this->integrate_smart(player_positions);
 				break;
 			case AIType::NORMAL:
 			default:
@@ -125,12 +127,20 @@ namespace astroblaster {
 		return;
 	}
 
-	void Enemy::integrate_smart(sf::Vector2<float> player_position) {
+	void Enemy::integrate_smart(std::vector<sf::Vector2<float>> player_positions) {
+		float diff{std::numeric_limits<float>::max()};
+		std::size_t index = 0u;
+		for (std::size_t i = 0u; i < player_positions.size(); ++i) {
+			if (std::fabs(this->weapon_position().y - player_positions.at(i).y) < diff) {
+				diff = std::fabs(this->weapon_position().y - player_positions.at(i).y);
+				index = i;
+			}
+		}
 		float follow{0.0f};
-		if (this->weapon_position().y - player_position.y > 25.0f) {
+		if (this->weapon_position().y - player_positions.at(index).y > 25.0f) {
 			follow = -5.0f;
 		}
-		else if (this->weapon_position().y - player_position.y < -25.0f) {
+		else if (this->weapon_position().y - player_positions.at(index).y < -25.0f) {
 			follow = 5.0f;
 		}
 		this->sprite.move(-speed, follow);

@@ -3,6 +3,7 @@
 #define PLAYER_HPP
 
 #include <cstdint>
+#include <string>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Rect.hpp>
@@ -11,7 +12,7 @@
 namespace astroblaster {
 	class Player {
 		public:
-			Player(sf::RenderWindow &window, TextureManager &tm);
+			Player(sf::RenderWindow &window, TextureManager &tm, std::string name = u8"PLR", std::size_t number = 0u);
 			void integrate(unsigned int controls);
 			void render();
 			sf::Rect<float> get_collision_box() const;
@@ -19,10 +20,12 @@ namespace astroblaster {
 			std::size_t get_energy() const;
 			std::size_t get_lives() const;
 			std::uint64_t get_score() const;
+			std::string get_name() const;
 			void add_score(std::size_t score);
 			sf::Vector2<float> weapon_position() const;
 		private:
 			sf::RenderWindow &window;
+			std::string name;
 			std::size_t energy;
 			std::size_t lives;
 			std::uint64_t score;

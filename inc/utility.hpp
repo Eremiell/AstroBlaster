@@ -4,11 +4,14 @@
 
 #include <string>
 #include <string_view>
+#include <array>
 
 namespace astroblaster {
 	const float width = 1600.0f;
 	const float height = 800.0f;
 	const float speed = 7.0f;
+
+	const std::array<std::string, 4> colours{"red", "green", "blue", "orange"};
 
 	enum class Controls : unsigned int {
 		Up = 1 << 0,
