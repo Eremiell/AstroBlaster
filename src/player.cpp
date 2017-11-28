@@ -27,78 +27,85 @@ namespace astroblaster {
 	}
 
 	void Player::integrate(unsigned int controls) {
-		sf::Vector2<float> movement(0.0f, 0.0f);
-		if (multiplayer) {
-			if (!this->number) {
-				if ((controls & static_cast<unsigned int>(Controls::P1Up)) && !(controls & static_cast<unsigned int>(Controls::P1Down))) {
-					movement.y -= 1.0f;
+		if (this->lives) {
+			sf::Vector2<float> movement(0.0f, 0.0f);
+			if (multiplayer) {
+				if (!this->number) {
+					if ((controls & static_cast<unsigned int>(Controls::P1Up)) && !(controls & static_cast<unsigned int>(Controls::P1Down))) {
+						movement.y -= 1.0f;
+					}
+					else if ((controls & static_cast<unsigned int>(Controls::P1Down)) && !(controls & static_cast<unsigned int>(Controls::P1Up))) {
+						movement.y += 1.0f;
+					}
+					if ((controls & static_cast<unsigned int>(Controls::P1Left)) && !(controls & static_cast<unsigned int>(Controls::P1Right))) {
+						movement.x -= 1.0f;
+					}
+					else if ((controls & static_cast<unsigned int>(Controls::P1Right)) && !(controls & static_cast<unsigned int>(Controls::P1Left))) {
+						movement.x += 1.0f;
+					}
+					if (controls & static_cast<unsigned int>(Controls::P1Shoot) && this->weapon_cooldown.getElapsedTime().asSeconds() >= 0.1f) {
+						this->weapon_cooldown.restart();
+						this->state.emplace_projectile(this->weapon_position(), true, this->number);
+					}
 				}
-				else if ((controls & static_cast<unsigned int>(Controls::P1Down)) && !(controls & static_cast<unsigned int>(Controls::P1Up))) {
-					movement.y += 1.0f;
-				}
-				if ((controls & static_cast<unsigned int>(Controls::P1Left)) && !(controls & static_cast<unsigned int>(Controls::P1Right))) {
-					movement.x -= 1.0f;
-				}
-				else if ((controls & static_cast<unsigned int>(Controls::P1Right)) && !(controls & static_cast<unsigned int>(Controls::P1Left))) {
-					movement.x += 1.0f;
-				}
-				if (controls & static_cast<unsigned int>(Controls::P1Shoot) && this->weapon_cooldown.getElapsedTime().asSeconds() >= 0.1f) {
-					this->weapon_cooldown.restart();
-					this->state.emplace_projectile(this->weapon_position(), true, this->number);
+				else {
+					if ((controls & static_cast<unsigned int>(Controls::P2Up)) && !(controls & static_cast<unsigned int>(Controls::P2Down))) {
+						movement.y -= 1.0f;
+					}
+					else if ((controls & static_cast<unsigned int>(Controls::P2Down)) && !(controls & static_cast<unsigned int>(Controls::P2Up))) {
+						movement.y += 1.0f;
+					}
+					if ((controls & static_cast<unsigned int>(Controls::P2Left)) && !(controls & static_cast<unsigned int>(Controls::P2Right))) {
+						movement.x -= 1.0f;
+					}
+					else if ((controls & static_cast<unsigned int>(Controls::P2Right)) && !(controls & static_cast<unsigned int>(Controls::P2Left))) {
+						movement.x += 1.0f;
+					}
+					if (controls & static_cast<unsigned int>(Controls::P2Shoot) && this->weapon_cooldown.getElapsedTime().asSeconds() >= 0.1f) {
+						this->weapon_cooldown.restart();
+						this->state.emplace_projectile(this->weapon_position(), true, this->number);
+					}
 				}
 			}
 			else {
-				if ((controls & static_cast<unsigned int>(Controls::P2Up)) && !(controls & static_cast<unsigned int>(Controls::P2Down))) {
+				if ((controls & static_cast<unsigned int>(Controls::P1Up) || controls & static_cast<unsigned int>(Controls::P2Up)) && !(controls & static_cast<unsigned int>(Controls::P1Down) || controls & static_cast<unsigned int>(Controls::P2Down))) {
 					movement.y -= 1.0f;
 				}
-				else if ((controls & static_cast<unsigned int>(Controls::P2Down)) && !(controls & static_cast<unsigned int>(Controls::P2Up))) {
+				if ((controls & static_cast<unsigned int>(Controls::P1Down) || controls & static_cast<unsigned int>(Controls::P2Down)) && !(controls & static_cast<unsigned int>(Controls::P1Up) || controls & static_cast<unsigned int>(Controls::P2Up))) {
 					movement.y += 1.0f;
 				}
-				if ((controls & static_cast<unsigned int>(Controls::P2Left)) && !(controls & static_cast<unsigned int>(Controls::P2Right))) {
+				if ((controls & static_cast<unsigned int>(Controls::P1Left) || controls & static_cast<unsigned int>(Controls::P2Left)) && !(controls & static_cast<unsigned int>(Controls::P1Right) || controls & static_cast<unsigned int>(Controls::P2Right))) {
 					movement.x -= 1.0f;
 				}
-				else if ((controls & static_cast<unsigned int>(Controls::P2Right)) && !(controls & static_cast<unsigned int>(Controls::P2Left))) {
+				if ((controls & static_cast<unsigned int>(Controls::P1Right) || controls & static_cast<unsigned int>(Controls::P2Right)) && !(controls & static_cast<unsigned int>(Controls::P1Left) || controls & static_cast<unsigned int>(Controls::P2Left))) {
 					movement.x += 1.0f;
 				}
-				if (controls & static_cast<unsigned int>(Controls::P2Shoot) && this->weapon_cooldown.getElapsedTime().asSeconds() >= 0.1f) {
+				if ((controls & static_cast<unsigned int>(Controls::P1Shoot) || controls & static_cast<unsigned int>(Controls::P2Shoot)) && this->weapon_cooldown.getElapsedTime().asSeconds() >= 0.1f) {
 					this->weapon_cooldown.restart();
 					this->state.emplace_projectile(this->weapon_position(), true, this->number);
 				}
 			}
+			if ((std::fabs(movement.x) > 0.001f) && (std::fabs(movement.y) > 0.001f)) {
+				movement.x *= std::sqrt(speed * speed / 2);
+				movement.y *= std::sqrt(speed * speed / 2);
+			}
+			else {
+				movement.x *= speed;
+				movement.y *= speed;
+			}
+			this->sprite.move(movement);
+			this->collide_against_bounds();
 		}
 		else {
-			if ((controls & static_cast<unsigned int>(Controls::P1Up) || controls & static_cast<unsigned int>(Controls::P2Up)) && !(controls & static_cast<unsigned int>(Controls::P1Down) || controls & static_cast<unsigned int>(Controls::P2Down))) {
-				movement.y -= 1.0f;
-			}
-			if ((controls & static_cast<unsigned int>(Controls::P1Down) || controls & static_cast<unsigned int>(Controls::P2Down)) && !(controls & static_cast<unsigned int>(Controls::P1Up) || controls & static_cast<unsigned int>(Controls::P2Up))) {
-				movement.y += 1.0f;
-			}
-			if ((controls & static_cast<unsigned int>(Controls::P1Left) || controls & static_cast<unsigned int>(Controls::P2Left)) && !(controls & static_cast<unsigned int>(Controls::P1Right) || controls & static_cast<unsigned int>(Controls::P2Right))) {
-				movement.x -= 1.0f;
-			}
-			if ((controls & static_cast<unsigned int>(Controls::P1Right) || controls & static_cast<unsigned int>(Controls::P2Right)) && !(controls & static_cast<unsigned int>(Controls::P1Left) || controls & static_cast<unsigned int>(Controls::P2Left))) {
-				movement.x += 1.0f;
-			}
-			if ((controls & static_cast<unsigned int>(Controls::P1Shoot) || controls & static_cast<unsigned int>(Controls::P2Shoot)) && this->weapon_cooldown.getElapsedTime().asSeconds() >= 0.1f) {
-				this->weapon_cooldown.restart();
-				this->state.emplace_projectile(this->weapon_position(), true, this->number);
-			}
+			this->sprite.setPosition(-1000.0f, height / 2);
 		}
-		if ((std::fabs(movement.x) > 0.001f) && (std::fabs(movement.y) > 0.001f)) {
-			movement.x *= std::sqrt(speed * speed / 2);
-			movement.y *= std::sqrt(speed * speed / 2);
-		}
-		else {
-			movement.x *= speed;
-			movement.y *= speed;
-		}
-		this->sprite.move(movement);
-		this->collide_against_bounds();
 		return;
 	}
 
 	void Player::render() {
-		this->window.draw(this->sprite);
+		if (this->lives) {
+			this->window.draw(this->sprite);
+		}
 		return;
 	}
 
@@ -107,11 +114,13 @@ namespace astroblaster {
 	}
 
 	void Player::collide_with(unsigned int type) {
-		if (type & static_cast<unsigned int>(CollisionType::Enemy)) {
-			this->deduce_energy(20);
-		}
-		else if (type & static_cast<unsigned int>(CollisionType::Projectile)) {
-			this->deduce_energy(10);
+		if (this->lives) {
+			if (type & static_cast<unsigned int>(CollisionType::Enemy)) {
+				this->deduce_energy(20);
+			}
+			else if (type & static_cast<unsigned int>(CollisionType::Projectile)) {
+				this->deduce_energy(10);
+			}
 		}
 		return;
 	}
@@ -166,17 +175,19 @@ namespace astroblaster {
 	}
 
 	void Player::deduce_energy(std::size_t damage) {
-		if (this->energy > damage) {
-			this->energy -= damage;
-		}
-		else {
-			if (this->lives > 1) {
-				this->energy = 100u;
+		if (this->lives) {
+			if (this->energy > damage) {
+				this->energy -= damage;
 			}
 			else {
-				this->energy = 0u;
+				if (this->lives > 1) {
+					this->energy = 100u;
+				}
+				else {
+					this->energy = 0u;
+				}
+				--this->lives;
 			}
-			--this->lives;
 		}
 		return;
 	}

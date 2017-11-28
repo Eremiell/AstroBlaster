@@ -39,6 +39,11 @@ namespace astroblaster {
 		this->player_score_text.setCharacterSize(28);
 		this->player_score_text.setString(u8"0");
 		this->player_score_text.setPosition(360.0f, 12.0f);
+		this->game_over.setFont(this->font);
+		this->game_over.setCharacterSize(50);
+		this->game_over.setString(u8"GAME OVER!");
+		this->game_over.setOrigin(this->game_over.getGlobalBounds().width / 2, this->game_over.getGlobalBounds().height / 2);
+		this->game_over.setPosition(width / 2, height / 2 - 100.0f);
 	}
 
 	void HUD::integrate(std::vector<std::size_t> player_energy, std::vector<std::size_t> player_lives, std::vector<std::uint64_t> player_score) {
@@ -78,6 +83,16 @@ namespace astroblaster {
 			this->window.draw(this->energy_bar);
 			this->window.draw(*std::next(this->player_names.begin(), i));
 			this->window.draw(this->player_score_text);
+			bool over = true;
+			for (auto &lives : this->player_lives) {
+				if (lives) {
+					over = false;
+					break;
+				}
+			}
+			if (over) {
+				this->window.draw(this->game_over);
+			}
 		}
 		return;
 	}

@@ -32,6 +32,7 @@ namespace astroblaster {
 			sf::RectangleShape energy_bar_outline;
 			std::list<sf::Text> player_names;
 			sf::Text player_score_text;
+			sf::Text game_over;
 	};
 }
 
