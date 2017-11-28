@@ -39,6 +39,7 @@ namespace astroblaster {
 			sf::Sprite sprite;
 			void collide_against_bounds();
 			void deduce_energy(std::size_t damage);
+			void fire();
 	};
 }
 

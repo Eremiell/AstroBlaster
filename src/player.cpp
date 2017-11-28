@@ -44,8 +44,7 @@ namespace astroblaster {
 						movement.x += 1.0f;
 					}
 					if (controls & static_cast<unsigned int>(Controls::P1Shoot) && this->weapon_cooldown.getElapsedTime().asSeconds() >= 0.1f) {
-						this->weapon_cooldown.restart();
-						this->state.emplace_projectile(this->weapon_position(), true, this->number);
+						this->fire();
 					}
 				}
 				else {
@@ -62,8 +61,7 @@ namespace astroblaster {
 						movement.x += 1.0f;
 					}
 					if (controls & static_cast<unsigned int>(Controls::P2Shoot) && this->weapon_cooldown.getElapsedTime().asSeconds() >= 0.1f) {
-						this->weapon_cooldown.restart();
-						this->state.emplace_projectile(this->weapon_position(), true, this->number);
+						this->fire();
 					}
 				}
 			}
@@ -81,8 +79,7 @@ namespace astroblaster {
 					movement.x += 1.0f;
 				}
 				if ((controls & static_cast<unsigned int>(Controls::P1Shoot) || controls & static_cast<unsigned int>(Controls::P2Shoot)) && this->weapon_cooldown.getElapsedTime().asSeconds() >= 0.1f) {
-					this->weapon_cooldown.restart();
-					this->state.emplace_projectile(this->weapon_position(), true, this->number);
+					this->fire();
 				}
 			}
 			if ((std::fabs(movement.x) > 0.001f) && (std::fabs(movement.y) > 0.001f)) {
@@ -189,6 +186,12 @@ namespace astroblaster {
 				--this->lives;
 			}
 		}
+		return;
+	}
+
+	void Player::fire() {
+		this->weapon_cooldown.restart();
+		this->state.emplace_projectile(this->weapon_position(), true, this->number);
 		return;
 	}
 }
