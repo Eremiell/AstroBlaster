@@ -94,7 +94,7 @@ namespace astroblaster {
 			this->collide_against_bounds();
 		}
 		else {
-			this->sprite.setPosition(10000.0f, height / 2);
+			this->sprite.setPosition(-1000.0f, height / 2);
 		}
 		return;
 	}

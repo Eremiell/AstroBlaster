@@ -17,7 +17,8 @@ namespace astroblaster {
 			player.integrate(controls);
 		}
 		for (auto &enemy : this->enemies) {
-			enemy.integrate(std::accumulate(this->players.begin(), this->players.end(), std::vector<sf::Vector2<float>>(), accumulate_position));
+			auto player_positions = std::accumulate(this->players.begin(), this->players.end(), std::vector<sf::Vector2<float>>(), accumulate_position);
+			enemy.integrate(player_positions.empty()?std::vector<sf::Vector2<float>>{sf::Vector2<float>(-1000.0f, height / 2)}:player_positions);
 
 		}
 		for (auto &projectile : this->projectiles) {
@@ -114,7 +115,9 @@ namespace astroblaster {
 	}
 
 	std::vector<sf::Vector2<float>> accumulate_position(std::vector<sf::Vector2<float>> position, Player p) {
-		position.emplace_back(p.weapon_position());
+		if (p.get_lives()) {
+			position.emplace_back(p.weapon_position());
+		}
 		return position;
 	}
 
