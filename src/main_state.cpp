@@ -18,6 +18,7 @@ namespace astroblaster {
 		}
 		for (auto &enemy : this->enemies) {
 			enemy.integrate(std::accumulate(this->players.begin(), this->players.end(), std::vector<sf::Vector2<float>>(), accumulate_position));
+
 		}
 		for (auto &projectile : this->projectiles) {
 			projectile.integrate();
@@ -49,6 +50,10 @@ namespace astroblaster {
 			auto player_box = player.get_collision_box();
 			for (auto it = this->enemies.begin(); it != this->enemies.end(); ++it) {
 				auto enemy_box = it->get_collision_box();
+				if (enemy_box.left <= -200.0f) {
+					it = std::prev(this->enemies.erase(it));
+					continue;
+				}
 				if (player_box.intersects(enemy_box)) {
 					player.collide_with(static_cast<unsigned int>(CollisionType::Enemy));
 					player.add_score(it->get_score());
@@ -57,6 +62,10 @@ namespace astroblaster {
 				}
 				for (auto itr = this->projectiles.begin(); itr != this->projectiles.end(); ++itr) {
 					auto projectile_box = itr->get_collision_box();
+					if (projectile_box.left <= -200.0f || projectile_box.left >= width + 200.0f) {
+						itr = std::prev(this->projectiles.erase(itr));
+						continue;
+					}
 					if (itr->get_direction() && enemy_box.intersects(projectile_box)) {
 						it->collide_with(static_cast<unsigned int>(CollisionType::Projectile));
 						if (!it->get_energy()) {
