@@ -94,13 +94,13 @@ namespace astroblaster {
 			this->collide_against_bounds();
 		}
 		else {
-			this->sprite.setPosition(-1000.0f, height / 2);
+			this->sprite.setPosition(10000.0f, height / 2);
 		}
 		return;
 	}
 
 	void Player::render() {
-		if (this->lives) {
+		if (this->lives && (this->protection_cooldown.getElapsedTime().asSeconds() > 2.0 || static_cast<unsigned int>(this->protection_cooldown.getElapsedTime().asSeconds() * 10) % 2)) {
 			this->window.draw(this->sprite);
 		}
 		return;
@@ -172,7 +172,7 @@ namespace astroblaster {
 	}
 
 	void Player::deduce_energy(std::size_t damage) {
-		if (this->lives) {
+		if (this->lives && this->protection_cooldown.getElapsedTime().asSeconds() > 2.0) {
 			if (this->energy > damage) {
 				this->energy -= damage;
 			}
@@ -184,6 +184,7 @@ namespace astroblaster {
 					this->energy = 0u;
 				}
 				--this->lives;
+				this->protection_cooldown.restart();
 			}
 		}
 		return;

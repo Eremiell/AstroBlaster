@@ -28,6 +28,7 @@ namespace astroblaster {
 			sf::Vector2<float> weapon_position() const;
 		private:
 			sf::Clock weapon_cooldown;
+			sf::Clock protection_cooldown;
 			sf::RenderWindow &window;
 			MainState &state;
 			std::string name;
