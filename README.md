@@ -2,7 +2,7 @@
 
 AstroBlaster is a top down left to right space shooter with arcade influence.
 
-![Current State](https://imgur.com/Oj5XweV.gif)
+![Current State](https://imgur.com/Nkai6P4.gif)
 ![Previous State](https://imgur.com/IIxPCv1.gif)
 ![Previous State](https://imgur.com/bt1NLP6.gif)
 ![Previous State](https://imgur.com/xkh7ySt.gif)
